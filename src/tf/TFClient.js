@@ -65,9 +65,8 @@ function TFClient(options) {
  * @param tf - the TF message from the server
  */
 TFClient.prototype.processTFArray = function(tf) {
-  var that = this;
-  tf.transforms.forEach(function(transform) {
-    var frameID = transform.child_frame_id.trimLeft('/');
+ tf.transforms.forEach(function(transform) {
+    var frameID = transform.child_frame_id;
     var info = this.frameInfos[frameID];
     if (info) {
       info.transform = new Transform({
@@ -150,7 +149,7 @@ TFClient.prototype.processResponse = function(response) {
  */
 TFClient.prototype.subscribe = function(frameID, callback) {
   // remove leading slash, if it's there
-  frameID = frameID.trimLeft('/');
+  frameID = frameID.substr(1);
   // if there is no callback registered for the given frame, create emtpy callback list
   if (!this.frameInfos[frameID]) {
     this.frameInfos[frameID] = {
@@ -176,7 +175,7 @@ TFClient.prototype.subscribe = function(frameID, callback) {
  */
 TFClient.prototype.unsubscribe = function(frameID, callback) {
   // remove leading slash, if it's there
-  frameID = frameID.trimLeft('/');
+  frameID = frameID.substring(1);
   var info = this.frameInfos[frameID];
   for (var cbs = info && info.cbs || [], idx = cbs.length; idx--;) {
     if (cbs[idx] === callback) {
