@@ -82,7 +82,7 @@ require('object-assign')(ROSLIB, require('./urdf/UrdfTypes'));
 
 module.exports = ROSLIB;
 
-},{"./actionlib/ActionClient":5,"./actionlib/Goal":6,"./actionlib/SimpleActionServer":7,"./core/Message":8,"./core/Param":9,"./core/Ros":10,"./core/Service":11,"./core/ServiceRequest":12,"./core/ServiceResponse":13,"./core/Topic":15,"./math/Pose":16,"./math/Quaternion":17,"./math/Transform":18,"./math/Vector3":19,"./tf/TFClient":20,"./urdf/UrdfBox":21,"./urdf/UrdfColor":22,"./urdf/UrdfCylinder":23,"./urdf/UrdfLink":24,"./urdf/UrdfMaterial":25,"./urdf/UrdfMesh":26,"./urdf/UrdfModel":27,"./urdf/UrdfSphere":28,"./urdf/UrdfTypes":29,"./urdf/UrdfVisual":30,"object-assign":1}],4:[function(require,module,exports){
+},{"./actionlib/ActionClient":5,"./actionlib/Goal":6,"./actionlib/SimpleActionServer":7,"./core/Message":8,"./core/Param":9,"./core/Ros":10,"./core/Service":11,"./core/ServiceRequest":12,"./core/ServiceResponse":13,"./core/Topic":15,"./math/Pose":16,"./math/Quaternion":17,"./math/Transform":18,"./math/Vector3":19,"./tf/TFClient":20,"./urdf/UrdfBox":21,"./urdf/UrdfColor":22,"./urdf/UrdfCylinder":23,"./urdf/UrdfLink":25,"./urdf/UrdfMaterial":26,"./urdf/UrdfMesh":27,"./urdf/UrdfModel":28,"./urdf/UrdfSphere":29,"./urdf/UrdfTypes":30,"./urdf/UrdfVisual":31,"object-assign":1}],4:[function(require,module,exports){
 (function (global){
 global.ROSLIB = require('./RosLib');
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
@@ -209,7 +209,7 @@ ActionClient.prototype.cancel = function() {
 };
 
 module.exports = ActionClient;
-},{"../core/Message":8,"../core/Topic":15,"./../util/shim/EventEmitter2.js":32}],6:[function(require,module,exports){
+},{"../core/Message":8,"../core/Topic":15,"./../util/shim/EventEmitter2.js":33}],6:[function(require,module,exports){
 /**
  * @author Russell Toris - rctoris@wpi.edu
  */
@@ -298,7 +298,7 @@ Goal.prototype.cancel = function() {
 };
 
 module.exports = Goal;
-},{"../core/Message":8,"./../util/shim/EventEmitter2.js":32}],7:[function(require,module,exports){
+},{"../core/Message":8,"./../util/shim/EventEmitter2.js":33}],7:[function(require,module,exports){
 /**
  * @author Laura Lindzey - lindzey@gmail.com
  */
@@ -506,7 +506,7 @@ SimpleActionServer.prototype.setPreempted = function() {
 };
 
 module.exports = SimpleActionServer;
-},{"../core/Message":8,"../core/Topic":15,"./../util/shim/EventEmitter2.js":32}],8:[function(require,module,exports){
+},{"../core/Message":8,"../core/Topic":15,"./../util/shim/EventEmitter2.js":33}],8:[function(require,module,exports){
 /**
  * @author Brandon Alexander - baalexander@gmail.com
  */
@@ -897,7 +897,7 @@ Ros.prototype.decodeTypeDefs = function(defs) {
 
 module.exports = Ros;
 
-},{"./../util/shim/EventEmitter2.js":32,"./../util/shim/WebSocket.js":33,"./Service":11,"./ServiceRequest":12,"./SocketAdapter.js":14,"object-assign":1}],11:[function(require,module,exports){
+},{"./../util/shim/EventEmitter2.js":33,"./../util/shim/WebSocket.js":34,"./Service":11,"./ServiceRequest":12,"./SocketAdapter.js":14,"object-assign":1}],11:[function(require,module,exports){
 /**
  * @author Brandon Alexander - baalexander@gmail.com
  */
@@ -1107,7 +1107,7 @@ function SocketAdapter(client) {
 
 module.exports = SocketAdapter;
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"./../util/shim/WebSocket.js":33,"./../util/shim/canvas.js":34}],15:[function(require,module,exports){
+},{"./../util/shim/WebSocket.js":34,"./../util/shim/canvas.js":35}],15:[function(require,module,exports){
 /**
  * @author Brandon Alexander - baalexander@gmail.com
  */
@@ -1270,7 +1270,7 @@ Topic.prototype.publish = function(message) {
 
 module.exports = Topic;
 
-},{"./../util/shim/EventEmitter2.js":32,"./Message":8}],16:[function(require,module,exports){
+},{"./../util/shim/EventEmitter2.js":33,"./Message":8}],16:[function(require,module,exports){
 /**
  * @author David Gossow - dgossow@willowgarage.com
  */
@@ -1570,8 +1570,7 @@ function TFClient(options) {
  * @param tf - the TF message from the server
  */
 TFClient.prototype.processTFArray = function(tf) {
-  var that = this;
-  tf.transforms.forEach(function(transform) {
+ tf.transforms.forEach(function(transform) {
     var frameID = transform.child_frame_id;
     var info = this.frameInfos[frameID];
     if (info) {
@@ -1725,7 +1724,7 @@ function UrdfBox(options) {
 }
 
 module.exports = UrdfBox;
-},{"../math/Vector3":19,"./UrdfTypes":29}],22:[function(require,module,exports){
+},{"../math/Vector3":19,"./UrdfTypes":30}],22:[function(require,module,exports){
 /**
  * @author Benjamin Pitzer - ben.pitzer@gmail.com
  * @author Russell Toris - rctoris@wpi.edu
@@ -1770,7 +1769,118 @@ function UrdfCylinder(options) {
 }
 
 module.exports = UrdfCylinder;
-},{"./UrdfTypes":29}],24:[function(require,module,exports){
+},{"./UrdfTypes":30}],24:[function(require,module,exports){
+/**
+ * Created by bblumberg on 1/26/15.
+ */
+var Pose = require('../math/Pose');
+var Vector3 = require('../math/Vector3');
+var Quaternion = require('../math/Quaternion');
+
+
+/**
+ * A Mesh element in a URDF.
+ *
+ * @constructor
+ * @param options - object with following keys:
+ *  * xml - the XML element to parse
+ */
+function UrdfJoint(options) {
+  this.pose = null;
+  this.name = options.xml.getAttribute('name');
+
+  // get the joint pose
+  var origins = options.xml.getElementsByTagName('origin');
+  if (origins.length === 0) {
+    // use the identity as the default
+    this.origin = new Pose();
+  }
+  else {
+    // Check the XYZ
+    var xyz = origins[0].getAttribute('xyz');
+    var position = new Vector3();
+    if (xyz) {
+      xyz = xyz.split(' ');
+      position = new Vector3({
+        x : parseFloat(xyz[0]),
+        y : parseFloat(xyz[1]),
+        z : parseFloat(xyz[2])
+      });
+    }
+
+    // Check the RPY
+    var rpy = origins[0].getAttribute('rpy');
+    var orientation = new Quaternion();
+    if (rpy) {
+      rpy = rpy.split(' ');
+      // Convert from RPY
+      var roll = parseFloat(rpy[0]);
+      var pitch = parseFloat(rpy[1]);
+      var yaw = parseFloat(rpy[2]);
+      var phi = roll / 2.0;
+      var the = pitch / 2.0;
+      var psi = yaw / 2.0;
+      var x = Math.sin(phi) * Math.cos(the) * Math.cos(psi) - Math.cos(phi) * Math.sin(the)
+        * Math.sin(psi);
+      var y = Math.cos(phi) * Math.sin(the) * Math.cos(psi) + Math.sin(phi) * Math.cos(the)
+        * Math.sin(psi);
+      var z = Math.cos(phi) * Math.cos(the) * Math.sin(psi) - Math.sin(phi) * Math.sin(the)
+        * Math.cos(psi);
+      var w = Math.cos(phi) * Math.cos(the) * Math.cos(psi) + Math.sin(phi) * Math.sin(the)
+        * Math.sin(psi);
+
+      orientation = new Quaternion({
+        x : x,
+        y : y,
+        z : z,
+        w : w
+      });
+      orientation.normalize();
+    }
+    this.origin = new Pose({
+      position : position,
+      orientation : orientation
+    });
+  }
+  this.axis = new Vector3(0,0,1);
+  //// get the axis
+  var axisElement = options.xml.getElementsByTagName('axis');
+  if(axisElement.length)
+  {
+    var axisXYZ = axisElement[0].getAttribute('xyz');
+    if (axisXYZ) {
+      axisXYZ = axisXYZ.split(' ');
+      this.axis = new Vector3({
+        x : parseFloat(axisXYZ[0]),
+        y : parseFloat(axisXYZ[1]),
+        z : parseFloat(axisXYZ[2])
+      });
+    }
+  }
+
+  //get the parent link
+  var parentLinkElement = options.xml.getElementsByTagName('parent');
+  this.parentLink = parentLinkElement[0].getAttribute('link');
+  // get the child link
+  var childLinkElement = options.xml.getElementsByTagName('child');
+  this.childLink = childLinkElement[0].getAttribute('link');
+
+  //get limits if there are any
+  this.limit = {};
+  var limitElement = options.xml.getElementsByTagName('limit');
+  if(limitElement.length)
+  {
+    this.limit['effort'] = limitElement[0].getAttribute('effort');
+    this.limit['upper'] = limitElement[0].getAttribute('upper');
+    this.limit['lower'] = limitElement[0].getAttribute('lower');
+    this.limit['velocity'] = limitElement[0].getAttribute('velocity');
+  }
+
+
+}
+
+module.exports = UrdfJoint;
+},{"../math/Pose":16,"../math/Quaternion":17,"../math/Vector3":19}],25:[function(require,module,exports){
 /**
  * @author Benjamin Pitzer - ben.pitzer@gmail.com
  * @author Russell Toris - rctoris@wpi.edu
@@ -1796,7 +1906,7 @@ function UrdfLink(options) {
 }
 
 module.exports = UrdfLink;
-},{"./UrdfVisual":30}],25:[function(require,module,exports){
+},{"./UrdfVisual":31}],26:[function(require,module,exports){
 /**
  * @author Benjamin Pitzer - ben.pitzer@gmail.com
  * @author Russell Toris - rctoris@wpi.edu
@@ -1834,7 +1944,7 @@ function UrdfMaterial(options) {
 }
 
 module.exports = UrdfMaterial;
-},{"./UrdfColor":22}],26:[function(require,module,exports){
+},{"./UrdfColor":22}],27:[function(require,module,exports){
 /**
  * @author Benjamin Pitzer - ben.pitzer@gmail.com
  * @author Russell Toris - rctoris@wpi.edu
@@ -1870,7 +1980,7 @@ function UrdfMesh(options) {
 }
 
 module.exports = UrdfMesh;
-},{"../math/Vector3":19,"./UrdfTypes":29}],27:[function(require,module,exports){
+},{"../math/Vector3":19,"./UrdfTypes":30}],28:[function(require,module,exports){
 /**
  * @author Benjamin Pitzer - ben.pitzer@gmail.com
  * @author Russell Toris - rctoris@wpi.edu
@@ -1878,6 +1988,7 @@ module.exports = UrdfMesh;
 
 var UrdfMaterial = require('./UrdfMaterial');
 var UrdfLink = require('./UrdfLink');
+var UrdfJoint = require('./UrdfJoint');
 var DOMParser = require('../util/DOMParser');
 
 // See https://developer.mozilla.org/docs/XPathResult#Constants
@@ -1897,6 +2008,7 @@ function UrdfModel(options) {
   var string = options.string;
   this.materials = {};
   this.links = {};
+  this.joints = {};
 
   // Check if we are using a string or an XML element
   if (string) {
@@ -1946,11 +2058,16 @@ function UrdfModel(options) {
         this.links[link.name] = link;
       }
     }
+    else if(node.tagName === 'joint')
+    {
+      var joint = new UrdfJoint({xml: node});
+      this.joints[joint.name] = joint;
+    }
   }
 }
 
 module.exports = UrdfModel;
-},{"../util/DOMParser":31,"./UrdfLink":24,"./UrdfMaterial":25}],28:[function(require,module,exports){
+},{"../util/DOMParser":32,"./UrdfJoint":24,"./UrdfLink":25,"./UrdfMaterial":26}],29:[function(require,module,exports){
 /**
  * @author Benjamin Pitzer - ben.pitzer@gmail.com
  * @author Russell Toris - rctoris@wpi.edu
@@ -1971,7 +2088,7 @@ function UrdfSphere(options) {
 }
 
 module.exports = UrdfSphere;
-},{"./UrdfTypes":29}],29:[function(require,module,exports){
+},{"./UrdfTypes":30}],30:[function(require,module,exports){
 module.exports = {
 	URDF_SPHERE : 0,
 	URDF_BOX : 1,
@@ -1979,7 +2096,7 @@ module.exports = {
 	URDF_MESH : 3
 };
 
-},{}],30:[function(require,module,exports){
+},{}],31:[function(require,module,exports){
 /**
  * @author Benjamin Pitzer - ben.pitzer@gmail.com
  * @author Russell Toris - rctoris@wpi.edu
@@ -2107,19 +2224,19 @@ function UrdfVisual(options) {
 }
 
 module.exports = UrdfVisual;
-},{"../math/Pose":16,"../math/Quaternion":17,"../math/Vector3":19,"./UrdfBox":21,"./UrdfCylinder":23,"./UrdfMaterial":25,"./UrdfMesh":26,"./UrdfSphere":28}],31:[function(require,module,exports){
+},{"../math/Pose":16,"../math/Quaternion":17,"../math/Vector3":19,"./UrdfBox":21,"./UrdfCylinder":23,"./UrdfMaterial":26,"./UrdfMesh":27,"./UrdfSphere":29}],32:[function(require,module,exports){
 module.exports = require('xmlshim').DOMParser;
-},{"xmlshim":2}],32:[function(require,module,exports){
+},{"xmlshim":2}],33:[function(require,module,exports){
 (function (global){
 module.exports = {
 	EventEmitter2: global.EventEmitter2
 };
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{}],33:[function(require,module,exports){
+},{}],34:[function(require,module,exports){
 (function (global){
 module.exports = global.WebSocket;
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{}],34:[function(require,module,exports){
+},{}],35:[function(require,module,exports){
 /* global document */
 module.exports = function Canvas() {
 	return document.createElement('canvas');
