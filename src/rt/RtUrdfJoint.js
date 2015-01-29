@@ -13,7 +13,7 @@ var Quaternion = require('../math/Quaternion');
  * @param options - object with following keys:
  *  * xml - the XML element to parse
  */
-function UrdfJoint(options) {
+function RtUrdfJoint(options) {
   this.pose = null;
   this.name = options.xml.getAttribute('name');
 
@@ -107,4 +107,4 @@ function UrdfJoint(options) {
 
 }
 
-module.exports = UrdfJoint;
+module.exports = RtUrdfJoint;

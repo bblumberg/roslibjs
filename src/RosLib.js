@@ -35,6 +35,9 @@ ROSLIB.UrdfModel = require('./urdf/UrdfModel');
 ROSLIB.UrdfSphere = require('./urdf/UrdfSphere');
 ROSLIB.UrdfVisual = require('./urdf/UrdfVisual');
 
+ROSLIB.RtUrdfJoint= require('./rt/RtUrdfJoint');
+ROSLIB.RtUrdfModel = require('./rt/RtUrdfModel');
+
 // Add URDF types
 require('object-assign')(ROSLIB, require('./urdf/UrdfTypes'));
 

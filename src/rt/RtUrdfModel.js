@@ -1,10 +1,14 @@
 /**
+ * Created by bblumberg on 1/29/15.
+ */
+/**
  * @author Benjamin Pitzer - ben.pitzer@gmail.com
  * @author Russell Toris - rctoris@wpi.edu
  */
 
-var UrdfMaterial = require('./UrdfMaterial');
-var UrdfLink = require('./UrdfLink');
+var UrdfMaterial = require('../urdf/UrdfMaterial');
+var UrdfLink = require('../urdf/UrdfLink');
+var RtUrdfJoint = require('./RtUrdfJoint');
 var DOMParser = require('../util/DOMParser');
 
 // See https://developer.mozilla.org/docs/XPathResult#Constants
@@ -18,12 +22,13 @@ var XPATH_FIRST_ORDERED_NODE_TYPE = 9;
  *  * xml - the XML element to parse
  *  * string - the XML element to parse as a string
  */
-function UrdfModel(options) {
+function RtUrdfModel(options) {
   options = options || {};
   var xmlDoc = options.xml;
   var string = options.string;
   this.materials = {};
   this.links = {};
+  this.joints = {};
 
   // Check if we are using a string or an XML element
   if (string) {
@@ -73,7 +78,12 @@ function UrdfModel(options) {
         this.links[link.name] = link;
       }
     }
+    else if(node.tagName === 'joint')
+    {
+      var joint = new  RtUrdfJoint({xml: node});
+      this.joints[joint.name] = joint;
+    }
   }
 }
 
-module.exports = UrdfModel;
+module.exports = RtUrdfModel;
